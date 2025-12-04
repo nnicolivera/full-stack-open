@@ -19,12 +19,16 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <>
       <h1>statistics</h1>
-      <Feedback text={"good"} points={good} />
-      <Feedback text={"neutral"} points={neutral} />
-      <Feedback text={"bad"} points={bad} />
-      <Feedback text={"all"} points={totalFeedbackCount} />
-      <Feedback text={"average"} points={totalPoints / totalFeedbackCount} />
-      <Feedback text={"positive"} points={(good * 100 / (totalFeedbackCount))} />
+      {totalFeedbackCount === 0 ? <p>No feedback given.</p> :
+        <>
+          <Feedback text={"good"} points={good} />
+          <Feedback text={"neutral"} points={neutral} />
+          <Feedback text={"bad"} points={bad} />
+          <Feedback text={"all"} points={totalFeedbackCount} />
+          <Feedback text={"average"} points={totalPoints / totalFeedbackCount} />
+          <Feedback text={"positive"} points={(good * 100 / (totalFeedbackCount))} />
+        </>
+      }
     </>
   )
 }
