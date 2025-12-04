@@ -18,6 +18,9 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const totalPoints = (good * 1) + (neutral * 0) + (bad * -1)
+  const totalFeedbackCount = good + neutral + bad
+
   return (
     <>
       <h1>give feedback</h1>
@@ -28,6 +31,9 @@ const App = () => {
       <Feedback text={"good"} points={good} />
       <Feedback text={"neutral"} points={neutral} />
       <Feedback text={"bad"} points={bad} />
+      <Feedback text={"all"} points={totalFeedbackCount} />
+      <Feedback text={"average"} points={totalPoints / totalFeedbackCount} />
+      <Feedback text={"positive"} points={(good * 100 / (good + neutral + bad))} />
     </>
   )
 }
