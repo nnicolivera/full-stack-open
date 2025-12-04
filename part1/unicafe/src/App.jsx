@@ -12,14 +12,28 @@ const Feedback = ({ text, points }) => {
   )
 }
 
+const Statistics = ({ good, neutral, bad }) => {
+  const totalPoints = (good * 1) + (neutral * 0) + (bad * -1)
+  const totalFeedbackCount = good + neutral + bad
+
+  return (
+    <>
+      <h1>statistics</h1>
+      <Feedback text={"good"} points={good} />
+      <Feedback text={"neutral"} points={neutral} />
+      <Feedback text={"bad"} points={bad} />
+      <Feedback text={"all"} points={totalFeedbackCount} />
+      <Feedback text={"average"} points={totalPoints / totalFeedbackCount} />
+      <Feedback text={"positive"} points={(good * 100 / (totalFeedbackCount))} />
+    </>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  const totalPoints = (good * 1) + (neutral * 0) + (bad * -1)
-  const totalFeedbackCount = good + neutral + bad
 
   return (
     <>
@@ -27,13 +41,7 @@ const App = () => {
       <Button onClick={() => setGood(good + 1)} text="good" />
       <Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
       <Button onClick={() => setBad(bad + 1)} text="bad" />
-      <h1>statistics</h1>
-      <Feedback text={"good"} points={good} />
-      <Feedback text={"neutral"} points={neutral} />
-      <Feedback text={"bad"} points={bad} />
-      <Feedback text={"all"} points={totalFeedbackCount} />
-      <Feedback text={"average"} points={totalPoints / totalFeedbackCount} />
-      <Feedback text={"positive"} points={(good * 100 / (good + neutral + bad))} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   )
 }
