@@ -10,34 +10,45 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
-  ]
+  ];
 
-  const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
-
-  const randomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+  const [mostVoted, setMostVoted] = useState(null);
 
   const handleVote = () => {
-    const copy = [...votes]
-    copy[selected] += 1
+    const copy = [...votes];
+    copy[selected] += 1;
     setVotes(copy);
+
+    if (mostVoted === null || copy[selected] > copy[mostVoted]) {
+      setMostVoted(selected);
+    }
   }
 
   const handleNext = () => {
-    setSelected(randomInt(0, 7))
+    setSelected(Math.floor(Math.random() * 8));
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <br />
       <p>has {votes[selected]} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleNext}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      {mostVoted === null ?
+        <p>You did not voted yet.</p>
+        :
+        <>
+          {anecdotes[mostVoted]}
+          <p>has {votes[mostVoted]} votes</p>
+        </>
+      }
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
