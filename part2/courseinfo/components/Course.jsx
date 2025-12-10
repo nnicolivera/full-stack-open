@@ -14,10 +14,21 @@ const Content = ({ parts }) => (
     </>
 )
 
+const Total = ({ parts }) => {
+    const total = parts.map(part => part.exercises).reduce((accumulator, current) => accumulator + current)
+
+    return (
+        <>
+            <p><b>total of {total} exercises</b></p>
+        </>
+    )
+}
+
 const Course = ({ course }) => (
     <div>
         <Header name={course.name} />
         <Content parts={course.parts} />
+        <Total parts={course.parts} />
     </div>
 )
 
