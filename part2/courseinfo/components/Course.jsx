@@ -1,5 +1,5 @@
 const Header = ({ name }) => (
-    <h1>{name}</h1>
+    <h2>{name}</h2>
 )
 
 const Part = ({ name, exercises }) => (
@@ -24,12 +24,17 @@ const Total = ({ parts }) => {
     )
 }
 
-const Course = ({ course }) => (
-    <div>
-        <Header name={course.name} />
-        <Content parts={course.parts} />
-        <Total parts={course.parts} />
-    </div>
+const Course = ({ courses }) => (
+    <>
+        <h1>Web development curriculum</h1>
+        {courses.map(course =>
+            <div key={course.id}>
+                <Header name={course.name} />
+                <Content parts={course.parts} />
+                <Total parts={course.parts} />
+            </div>
+        )}
+    </>
 )
 
 export default Course
