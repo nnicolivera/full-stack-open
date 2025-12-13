@@ -1,4 +1,13 @@
-const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, handleNameChange, handleNumberChange }) => {
+const PersonForm = ({
+    persons,
+    setPersons,
+    newName,
+    setNewName,
+    newNumber,
+    setNewNumber,
+    handleNameChange,
+    handleNumberChange
+}) => {
 
     const addName = (e) => {
         e.preventDefault();
