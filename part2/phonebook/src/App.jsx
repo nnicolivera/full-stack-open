@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import personService from './services/persons';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -11,12 +11,12 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(res => {
-        setPersons(res.data);
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons);
       });
   }, []);
-
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -28,6 +28,15 @@ const App = () => {
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
+  }
+
+  const handleDelete = (id) => {
+    window.confirm(`Delete ${persons.find(person => person.id === id)?.name}?`) &&
+      personService
+        .remove(id)
+        .then(returnedNote => {
+          setPersons(persons.filter(person => person.id !== returnedNote.id));
+        });
   }
 
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
@@ -48,7 +57,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} handleDelete={handleDelete} />
     </>
   );
 };
