@@ -8,7 +8,8 @@ const PersonForm = ({
     newNumber,
     setNewNumber,
     handleNameChange,
-    handleNumberChange
+    handleNumberChange,
+    setNotification
 }) => {
 
     const addName = (e) => {
@@ -31,9 +32,26 @@ const PersonForm = ({
                 personService
                     .update(currentPerson.id, personObject)
                     .then(returnedPerson => {
+                        const notification = {
+                            message: `Modified ${currentPerson.name}`,
+                            type: 'success'
+                        }
+                        setNotification(notification);
+                        setTimeout(() => {
+                            setNotification(null)
+                        }, 5000);
                         setPersons(persons.map(person => person.id !== currentPerson.id ? person : returnedPerson));
                         setNewName('');
                         setNewNumber('');
+                    })
+                    .catch(err => {
+                        setNotification({
+                            message: `Information of ${personObject.name} has already been removed from server`,
+                            type: 'error'
+                        });
+                        setTimeout(() => {
+                            setNotification(null)
+                        }, 5000);
                     });
         } else if (existName && existNumber) {
             alert(`${trimmedName} with number ${trimmedNumber} is already added to phonebook`);
@@ -41,6 +59,14 @@ const PersonForm = ({
             personService
                 .create(personObject)
                 .then(returnedPerson => {
+                    const notification = {
+                        message: `Added ${personObject.name}`,
+                        type: 'success'
+                    }
+                    setNotification(notification);
+                    setTimeout(() => {
+                        setNotification(null)
+                    }, 5000);
                     setPersons(persons.concat(returnedPerson));
                     setNewName('');
                     setNewNumber('');

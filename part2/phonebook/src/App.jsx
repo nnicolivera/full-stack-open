@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import personService from './services/persons';
+import Notification from './components/Notification';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personService
@@ -34,8 +36,8 @@ const App = () => {
     window.confirm(`Delete ${persons.find(person => person.id === id)?.name}?`) &&
       personService
         .remove(id)
-        .then(returnedNote => {
-          setPersons(persons.filter(person => person.id !== returnedNote.id));
+        .then(returnedPerson => {
+          setPersons(persons.filter(person => person.id !== returnedPerson.id));
         });
   }
 
@@ -44,8 +46,9 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
-      <h3>Add a new</h3>
+      <h2>Add a new</h2>
       <PersonForm
         persons={persons}
         setPersons={setPersons}
@@ -55,8 +58,10 @@ const App = () => {
         setNewNumber={setNewNumber}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
+        notification={notification}
+        setNotification={setNotification}
       />
-      <h3>Numbers</h3>
+      <h2>Numbers</h2>
       <Persons filteredPersons={filteredPersons} handleDelete={handleDelete} />
     </>
   );
