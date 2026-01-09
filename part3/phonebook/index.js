@@ -1,5 +1,12 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
+morgan.token('body', (req, res) => {
+    return JSON.stringify(req.body);
+});
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.use(express.json())
 
@@ -58,7 +65,6 @@ app.get('/api/persons/:id', (request, response) => {
 const generateId = () => {
     return String(Math.floor(Math.random() * 10000));
 }
-
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
