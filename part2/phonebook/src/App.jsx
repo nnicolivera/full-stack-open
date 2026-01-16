@@ -36,8 +36,8 @@ const App = () => {
     window.confirm(`Delete ${persons.find(person => person.id === id)?.name}?`) &&
       personService
         .remove(id)
-        .then(returnedPerson => {
-          setPersons(persons.filter(person => person.id !== returnedPerson.id));
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
         });
   }
 
