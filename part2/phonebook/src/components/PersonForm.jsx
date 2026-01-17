@@ -44,21 +44,36 @@ const PersonForm = ({
                         setNewName('');
                         setNewNumber('');
                     })
-                    .catch(err => {
-                        setNotification({
-                            message: `Information of ${personObject.name} has already been removed from server`,
-                            type: 'error'
-                        });
-                        setTimeout(() => {
-                            setNotification(null)
-                        }, 5000);
+                    .catch(error => {
+                        console.log(error)
+                        if (error.status === 404) {
+                            setNotification({
+                                message: `Information of ${personObject.name} has already been removed from server`,
+                                type: 'error'
+                            });
+                            setTimeout(() => {
+                                setNotification(null)
+                            }, 5000);
+                            setPersons(persons.filter(person => person.id !== currentPerson.id));
+                        }
+
+                        if (error.status === 400) {
+                            const notification = {
+                                message: error.response.data.error,
+                                type: 'error'
+                            }
+                            setNotification(notification);
+                            setTimeout(() => {
+                                setNotification(null)
+                            }, 10000);
+                        }
                     });
         } else if (existName && existNumber) {
             alert(`${trimmedName} with number ${trimmedNumber} is already added to phonebook`);
         } else {
             personService
                 .create(personObject)
-                .then(returnedPerson => {
+                .then(createdPerson => {
                     const notification = {
                         message: `Added ${personObject.name}`,
                         type: 'success'
@@ -67,10 +82,20 @@ const PersonForm = ({
                     setTimeout(() => {
                         setNotification(null)
                     }, 5000);
-                    setPersons(persons.concat(returnedPerson));
+                    setPersons(persons.concat(createdPerson));
                     setNewName('');
                     setNewNumber('');
-                });
+                })
+                .catch(error => {
+                    const notification = {
+                        message: error.response.data.error,
+                        type: 'error'
+                    }
+                    setNotification(notification);
+                    setTimeout(() => {
+                        setNotification(null)
+                    }, 10000);
+                })
         };
     };
 
