@@ -12,6 +12,16 @@ const requestLogger = (request, response, next) => {
     next()
 }
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+}
+
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
@@ -82,16 +92,6 @@ const unknownEndpoint = (request, response) => {
 
 // handler of requests with unknown endpoint
 app.use(unknownEndpoint)
-
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
-
-    if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'malformatted id' })
-    }
-
-    next(error)
-}
 
 // handler of requests that result in errors
 app.use(errorHandler)
