@@ -20,6 +20,8 @@ const errorHandler = (error, request, response, next) => {
     } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message })
     }
+
+    next(error)
 }
 
 app.use(express.static('dist'))
@@ -61,9 +63,9 @@ app.post('/api/notes', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.delete('/api/notes/:id', (request, response) => {
+app.delete('/api/notes/:id', (request, response, next) => {
     Note.findByIdAndDelete(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))

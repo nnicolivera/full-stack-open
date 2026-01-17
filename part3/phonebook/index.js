@@ -5,8 +5,8 @@ const Person = require('./models/person')
 
 const app = express()
 
-morgan.token('body', (req, res) => {
-    return JSON.stringify(req.body);
+morgan.token('body', (req) => {
+    return JSON.stringify(req.body)
 })
 
 const errorHandler = (error, request, response, next) => {
@@ -17,6 +17,8 @@ const errorHandler = (error, request, response, next) => {
     } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message })
     }
+
+    next(error)
 }
 
 app.use(express.static('dist'))
@@ -40,7 +42,7 @@ app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => response.json(persons))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
         .then(person => {
             if (person) {
@@ -71,7 +73,7 @@ app.post('/api/persons', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id)
         .then(() => {
             response.status(204).end()
