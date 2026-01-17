@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const Person = require('./models/person')
-const note = require('../notes/models/note')
 
 const app = express()
 
